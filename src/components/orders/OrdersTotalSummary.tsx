@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { ScrollAreaRoot } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { normalizeProductName } from '@/lib/utils';
 import { fetchOrdersByDate } from '@/lib/firebase/orders';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 import { formatWhatsAppMessage, generatePDF } from '@/lib/utils/report';
 
 interface OrdersTotalSummaryProps {
@@ -37,19 +37,20 @@ interface BranchQuantity {
 export function OrdersTotalSummary({ selectedDate, onDataChange }: OrdersTotalSummaryProps) {
   const [ordersData, setOrdersData] = useState<Record<string, Record<string, string>>>({});
   const [expandedProducts, setExpandedProducts] = useState<string[]>([]);
+  const { toast } = useToast();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const data = await fetchOrdersByDate(selectedDate);
       setOrdersData(data || {});
     } catch (error) {
       console.error('Sifarişləri yükləmək mümkün olmadı:', error);
     }
-  };
+  }, [selectedDate]);
 
   useEffect(() => {
     fetchData();
-  }, [selectedDate, onDataChange]);
+  }, [fetchData]);
 
   const getBranchQuantities = (productName: string): BranchQuantity[] => {
     const quantities: BranchQuantity[] = [];
@@ -200,7 +201,10 @@ export function OrdersTotalSummary({ selectedDate, onDataChange }: OrdersTotalSu
             onClick={() => {
               const message = formatWhatsAppMessage(totals, totalProducts, totalQuantity, totalBranches);
               navigator.clipboard.writeText(message);
-              toast.success('Məlumatlar kopyalandı');
+              toast({
+                title: 'Uğurlu',
+                description: 'Məlumatlar kopyalandı'
+              });
             }}
           >
             <Copy className="w-4 h-4 mr-2" />

@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import { Metadata } from 'next';
 import OrderListSkeleton from '@/components/orders/OrderListSkeleton';
 import CreateOrderButton from '@/components/orders/CreateOrderButton';
 import { OrdersCalendar } from '@/components/orders/OrdersCalendar';

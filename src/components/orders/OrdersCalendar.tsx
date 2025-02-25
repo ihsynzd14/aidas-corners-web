@@ -1,11 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Calendar } from '@/components/ui/calendar';
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { fetchOrdersByDate } from '@/lib/api/orders';
-import { AlertDialog } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { XCircle, CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { 
@@ -45,13 +42,13 @@ export function OrdersCalendar({ selectedDate, onDateChange, onDataChange }: Ord
     description: ''
   });
 
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await fetchOrdersByDate(selectedDate);
-      setOrdersData(data);
+      await fetchOrdersByDate(selectedDate);
       setError(null);
     } catch (error) {
+      console.error('Load orders error:', error);
       setError('Sifarişləri yükləyərkən xəta baş verdi');
       setAlertState({
         isOpen: true,
@@ -62,11 +59,11 @@ export function OrdersCalendar({ selectedDate, onDateChange, onDataChange }: Ord
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedDate]);
 
   useEffect(() => {
     loadOrders();
-  }, [selectedDate]);
+  }, [loadOrders]);
 
   if (loading) {
     return (

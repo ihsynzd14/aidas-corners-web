@@ -69,6 +69,7 @@ export default function OrderCard({ order }: OrderCardProps) {
         description: 'Sifariş statusu yeniləndi',
       });
     } catch (error) {
+      console.error('Status update error:', error);
       toast({
         variant: 'destructive',
         title: 'Xəta',
@@ -92,6 +93,7 @@ export default function OrderCard({ order }: OrderCardProps) {
         description: 'Sifariş silindi',
       });
     } catch (error) {
+      console.error('Delete order error:', error);
       toast({
         variant: 'destructive',
         title: 'Xəta',

@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
@@ -21,8 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 import { az } from 'date-fns/locale';
-import { createOrder, addOrder } from '@/lib/api/orders';
-import { OrderFormData } from '@/types/order';
+import { addOrder } from '@/lib/api/orders';
 import { useToast } from '@/hooks/use-toast';
 import { getBranches } from '@/lib/firebase/config';
 import { Branch } from '@/types/branch';

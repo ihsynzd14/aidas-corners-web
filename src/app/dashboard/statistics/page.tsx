@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { GeneralOverview } from '@/components/statistics/general-overview';
 import { SingleBranchView } from '@/components/statistics/single-branch-view';

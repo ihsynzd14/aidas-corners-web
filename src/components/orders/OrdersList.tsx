@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { ScrollAreaRoot } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
@@ -139,6 +139,7 @@ function BranchSection({ branchName, products, selectedDate, onDataChange }: Bra
       await deleteBranchOrders(selectedDate, branchName);
       onDataChange();
     } catch (error) {
+      console.error('Delete branch error:', error);
       setAlertState({
         isOpen: true,
         status: 'error',
@@ -159,6 +160,7 @@ function BranchSection({ branchName, products, selectedDate, onDataChange }: Bra
         description: 'Məhsul uğurla silindi'
       });
     } catch (error) {
+      console.error('Delete product error:', error);
       setAlertState({
         isOpen: true,
         status: 'error',
@@ -193,6 +195,7 @@ function BranchSection({ branchName, products, selectedDate, onDataChange }: Bra
         description: 'Məhsul uğurla yeniləndi'
       });
     } catch (error) {
+      console.error('Update product error:', error);
       setAlertState({
         isOpen: true,
         status: 'error',
@@ -214,6 +217,7 @@ function BranchSection({ branchName, products, selectedDate, onDataChange }: Bra
         description: 'Məhsul uğurla əlavə edildi'
       });
     } catch (error) {
+      console.error('Add product error:', error);
       setAlertState({
         isOpen: true,
         status: 'error',
@@ -352,50 +356,66 @@ interface OrdersListProps {
 }
 
 export function OrdersList({ selectedDate, onDataChange }: OrdersListProps) {
-  const [ordersData, setOrdersData] = useState<Record<string, Record<string, string>>>({});
+  const [orders, setOrders] = useState<Record<string, Record<string, string>>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [alertState, setAlertState] = useState<{
+    isOpen: boolean;
+    status: 'success' | 'error';
+    title: string;
+    description: string;
+  }>({
+    isOpen: false,
+    status: 'success',
+    title: '',
+    description: ''
+  });
 
-  const fetchData = async () => {
-    setIsLoading(true);
+  const fetchData = useCallback(async () => {
     try {
       const data = await fetchOrdersByDate(selectedDate);
-      setOrdersData(data || {});
+      setOrders(data || {});
     } catch (error) {
-      console.error('Sifarişləri yükləmək mümkün olmadı:', error);
+      console.error('Fetch orders error:', error);
+      setAlertState({
+        isOpen: true,
+        status: 'error',
+        title: 'Xəta',
+        description: 'Sifarişləri yükləmək mümkün olmadı'
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [selectedDate]);
 
   useEffect(() => {
     fetchData();
-  }, [selectedDate]);
+  }, [fetchData]);
 
   const handleDataChange = () => {
-    fetchData();
     onDataChange();
+    fetchData();
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="text-amber-900 dark:text-amber-100">Yüklənir...</div>
       </div>
     );
   }
 
-  if (!ordersData || Object.keys(ordersData).length === 0) {
+  if (!orders || Object.keys(orders).length === 0) {
     return (
       <Card className="min-h-[400px] max-h-[80vh] p-8 flex items-center justify-center bg-white dark:bg-gray-900 border-amber-100 dark:border-gray-800">
         <div className="text-center space-y-4">
-          <div className="p-4 rounded-full bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-gray-800 dark:to-gray-900 w-fit mx-auto shadow-lg shadow-amber-100/50 dark:shadow-gray-900/40">
-            <Store className="w-8 h-8 text-amber-600 dark:text-amber-500" />
+          <div className="p-4 rounded-full bg-amber-50 dark:bg-amber-900/20 mx-auto w-fit">
+            <Cookie className="w-8 h-8 text-amber-600 dark:text-amber-400" />
           </div>
-          <div>
-            <p className="text-gray-700 dark:text-gray-300 font-medium">
-              Məlumat tapılmadı
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <div className="space-y-2">
+            <h3 className="text-lg font-medium text-amber-900 dark:text-amber-100">
+              Sifariş Tapılmadı
+            </h3>
+            <p className="text-sm text-amber-600 dark:text-amber-400">
               Bu tarix üçün heç bir sifariş yoxdur
             </p>
           </div>
@@ -407,7 +427,7 @@ export function OrdersList({ selectedDate, onDataChange }: OrdersListProps) {
   return (
     <ScrollAreaRoot className="min-h-[400px] max-h-[80vh] overflow-y-auto rounded-lg bg-white/50 dark:bg-gray-900 dark:shadow-gray-900/40">
       <div className="space-y-4 p-4 scrollbar-thin scrollbar-thumb-amber-200 dark:scrollbar-thumb-gray-700 scrollbar-track-amber-50 dark:scrollbar-track-gray-800">
-        {Object.entries(ordersData).map(([branchName, products]) => (
+        {Object.entries(orders).map(([branchName, products]) => (
           <BranchSection
             key={branchName}
             branchName={branchName}

@@ -34,7 +34,7 @@ export default function HomePage() {
         <div className="flex-1 text-center md:text-left">
           <div className="max-w-md mx-auto md:mx-0">
             <h1 className="text-4xl md:text-5xl font-bold text-amber-900 mb-2">
-              Aida's Corners
+              Aida&apos;s Corners
             </h1>
             <p className="text-lg text-amber-700 mb-8 font-light">
               Françayzinq İdarəetmə Portalı
@@ -105,7 +105,7 @@ export default function HomePage() {
             <div className="relative w-full h-[600px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
                 src="/images/bg-login.webp"
-                alt="Aida's Corners"
+                alt="Aida&apos;s Corners"
                 fill
                 className="object-cover object-center"
                 priority

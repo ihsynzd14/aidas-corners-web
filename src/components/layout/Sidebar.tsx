@@ -15,7 +15,7 @@ import {
 interface MenuItem {
   title: string;
   path: string;
-  icon: React.ForwardRefExoticComponent<any>;
+  icon: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
   badge?: string;
 }
 
@@ -146,7 +146,7 @@ export default function Sidebar({ className = '' }: SidebarProps) {
             >
               <div className="flex items-center justify-between p-4 border-b border-amber-100 dark:border-amber-900/20">
                 <h1 className="text-xl font-bold text-amber-900 dark:text-amber-100">
-                  Aida's Corners
+                  Aida&apos;s Corners
                 </h1>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -206,7 +206,7 @@ export default function Sidebar({ className = '' }: SidebarProps) {
         {/* Logo */}
         <div className="flex-shrink-0 pt-6 p-4 border-b border-amber-100 dark:border-amber-900/20">
           {!isCollapsed ? (
-            <h1 className="text-xl font-bold text-amber-900 dark:text-amber-100">Aida's Corners</h1>
+            <h1 className="text-xl font-bold text-amber-900 dark:text-amber-100">Aida&apos;s Corners</h1>
           ) : (
             <span className="text-xl font-bold text-amber-900 dark:text-amber-100">A</span>
           )}

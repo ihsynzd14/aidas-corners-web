@@ -29,7 +29,7 @@ export default function DashboardPage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
             <div className="flex items-center space-x-4 w-full sm:w-auto justify-center sm:justify-start">
               <h1 className="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-100">
-                Aida's Corners
+                Aida&apos;s Corners
               </h1>
               <span className="text-xs sm:text-sm text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/20 px-3 py-1 rounded-full">
                 İdarəetmə Paneli
