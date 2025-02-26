@@ -160,8 +160,8 @@ export function SingleBranchView() {
       <div className="flex flex-col md:flex-row md:items-end gap-6">
         <div className="flex-1 space-y-2">
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-            <h2 className="text-xl font-semibold text-primary">Tarix aralığı seçin</h2>
-            <div className="flex gap-2 items-center">
+            <h2 className="text-xl font-semibold text-amber-900">Tarix aralığı seçin</h2>
+            <div className="flex gap-2 items-center text-amber-900">
               <DatePickerWithRange date={date} setDate={setDate} />
               <Button
                 variant="outline"
@@ -186,12 +186,12 @@ export function SingleBranchView() {
           <div className="w-full md:w-[300px] space-y-2">
             {activeTab === 'branch' ? (
               <>
-                <h2 className="text-xl font-semibold text-primary">Filial seçin</h2>
+                <h2 className="text-xl font-semibold text-amber-900">Filial seçin</h2>
                 <Select
                   value={selectedBranch}
                   onValueChange={setSelectedBranch}
                 >
-                  <SelectTrigger className="bg-card border-border/40">
+                  <SelectTrigger className="bg-card border-border/40 text-amber-900">
                     <SelectValue placeholder="Filial seçin" />
                   </SelectTrigger>
                   <SelectContent>
@@ -205,12 +205,12 @@ export function SingleBranchView() {
               </>
             ) : (
               <>
-                <h2 className="text-xl font-semibold text-primary">Məhsul seçin</h2>
+                <h2 className="text-xl font-semibold text-amber-900">Məhsul seçin</h2>
                 <Select
                   value={selectedProduct}
                   onValueChange={setSelectedProduct}
                 >
-                  <SelectTrigger className="bg-card border-border/40">
+                  <SelectTrigger className="text-amber-900 bg-card border-border/40 ">
                     <SelectValue placeholder="Məhsul seçin" />
                   </SelectTrigger>
                   <SelectContent>
@@ -249,8 +249,8 @@ export function SingleBranchView() {
               <CardHeader className="space-y-4 border-b border-border/40">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <CardTitle className="flex items-center gap-2">
-                    <BarChart3 className="h-5 w-5 text-primary" />
-                    <span>Məhsul Statistikası</span>
+                    <BarChart3 className="h-5 w-5 text-amber-900" />
+                    <span className="text-amber-900">Məhsul Statistikası</span>
                   </CardTitle>
                   <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
                     <div className="relative w-full md:w-64">
@@ -277,7 +277,7 @@ export function SingleBranchView() {
               </CardHeader>
               <CardContent className="p-0">
                 <ScrollAreaPrimitive.Root className="h-[600px] w-full overflow-hidden" type="always">
-                  <ScrollAreaPrimitive.Viewport className="h-full w-full">
+                  <ScrollAreaPrimitive.Viewport className="h-full w-full ">
                     <div className="space-y-4 p-6">
                       {filteredProducts.map((product) => (
                         <motion.div
@@ -288,20 +288,21 @@ export function SingleBranchView() {
                         >
                           <div className="flex justify-between items-center">
                             <div className="space-y-1">
-                              <span className="font-medium text-foreground/90">{product.name}</span>
+                              <span className="font-medium text-amber-900">{product.name}</span>
                               {activeTab === 'product' && (
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-sm text-amber-900/70">
                                   {product.branch}
                                 </p>
                               )}
                             </div>
-                            <span className="text-sm font-medium text-foreground/90">
+                            <span className="text-sm font-medium text-amber-900">
                               {product.quantity.toLocaleString()}
                             </span>
                           </div>
                           <Progress
                             value={(product.quantity / maxQuantity) * 100}
-                            className="h-2 bg-accent [&>[role=progressbar]]:bg-primary"
+                            className="h-2 bg-accent [&>[role=progressbar]]:bg-amber-900"
+                           
                           />
                         </motion.div>
                       ))}
