@@ -129,9 +129,33 @@ function GeneralOverviewComponent() {
 
       const processedProducts: Product[] = Object.entries(totalBranch.products)
         .filter(([, quantity]) => parseFloat(quantity) > 0)
-        .map(([name, totalQuantity]) => {
-          const branchQuantities: { [key: string]: number } = {};
+        .reduce((acc: Product[], [name, totalQuantity]) => {
+          // Normalize product name by trimming whitespace
+          const normalizedName = name.trim();
           
+          // Find existing product with the same normalized name
+          const existingProduct = acc.find(p => p.name === normalizedName);
+          
+          if (existingProduct) {
+            // If product exists, add to its quantities
+            existingProduct.totalQuantity += parseFloat(totalQuantity);
+            
+            // Merge branch quantities
+            regularBranches.forEach(branch => {
+              if (branch.products[name]) {
+                const quantity = parseFloat(branch.products[name]);
+                if (quantity > 0) {
+                  existingProduct.branchQuantities[branch.branchName] = 
+                    (existingProduct.branchQuantities[branch.branchName] || 0) + quantity;
+                }
+              }
+            });
+            
+            return acc;
+          }
+          
+          // If product doesn't exist, create new entry
+          const branchQuantities: { [key: string]: number } = {};
           regularBranches.forEach(branch => {
             if (branch.products[name]) {
               const quantity = parseFloat(branch.products[name]);
@@ -141,12 +165,14 @@ function GeneralOverviewComponent() {
             }
           });
 
-          return {
-            name,
+          acc.push({
+            name: normalizedName,
             totalQuantity: parseFloat(totalQuantity),
             branchQuantities
-          };
-        });
+          });
+          
+          return acc;
+        }, []);
 
       setProducts(processedProducts);
       setIsInitialLoad(false);
@@ -284,7 +310,7 @@ function GeneralOverviewComponent() {
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <ChartBarIcon className="h-5 w-5 text-primary/70" />
-                <span className="text-lg">Ümumi Statistika</span>
+                <span className="text-lg text-amber-900">Ümumi Statistika</span>
               </div>
               {products.length > 0 && (
                 <div className="flex items-center gap-2">
@@ -324,9 +350,9 @@ function GeneralOverviewComponent() {
               <div className="space-y-2 p-3 rounded-lg bg-accent/5 hover:bg-accent/10 transition-colors group">
                 <div className="flex items-center gap-2">
                   <BoxesIcon className="h-4 w-4 text-primary/70" />
-                  <p className="text-sm text-muted-foreground font-medium">Toplam Məhsul Növü</p>
+                  <p className="text-sm text-muted-foreground font-medium ">Toplam Məhsul Növü</p>
                 </div>
-                <p className="text-2xl font-bold text-foreground/90 group-hover:text-primary/90 transition-colors">
+                <p className="text-2xl font-bold text-amber-900 dark:text-foreground/90 group-hover:text-primary/90 transition-colors ">
                   {products.length.toLocaleString()}
                 </p>
               </div>
@@ -335,7 +361,7 @@ function GeneralOverviewComponent() {
                   <ShoppingCartIcon className="h-4 w-4 text-primary/70" />
                   <p className="text-sm text-muted-foreground font-medium">Ümumi Satış</p>
                 </div>
-                <p className="text-2xl font-bold text-foreground/90 group-hover:text-primary/90 transition-colors">
+                <p className="text-2xl font-bold text-amber-900 dark:text-foreground/90 group-hover:text-primary/90 transition-colors">
                   {totalSales.toLocaleString()}
                 </p>
               </div>
@@ -344,12 +370,12 @@ function GeneralOverviewComponent() {
                   <TrendingUpIcon className="h-4 w-4 text-emerald-500" />
                   <p className="text-sm text-muted-foreground font-medium">Ən Çox Satan</p>
                 </div>
-                <div className="space-y-0.5">
-                  <p className="text-sm font-medium text-foreground/90 group-hover:text-primary/90 transition-colors">
-                    {maxProduct?.name}
-                  </p>
+                <div className="space-y-0.5 flex items-center gap-2">
                   <p className="text-xl font-bold text-emerald-500/90">
                     {maxProduct?.totalQuantity.toLocaleString()}
+                  </p>
+                  <p className="text-md font-medium dark:text-foreground/90 group-hover:text-primary/90 transition-colors">
+                    {maxProduct?.name}
                   </p>
                 </div>
               </div>
@@ -368,15 +394,15 @@ function GeneralOverviewComponent() {
                           {p.name.includes('Lokumlu') ? 'Lokumlu:' : 'Şokolad:'} {p.totalQuantity.toLocaleString()}
                         </span>
                       ))
-                    }
+                    } 
                   </div>
                 </div>
-                <div className="space-y-0.5">
-                  <p className="text-sm font-medium text-foreground/90 group-hover:text-primary/90 transition-colors">
-                    {minProduct?.name}
-                  </p>
+                <div className="space-y-0.5 flex items-center gap-2">
                   <p className="text-xl font-bold text-rose-500/90">
                     {minProduct?.totalQuantity.toLocaleString()}
+                  </p>
+                  <p className="text-md font-medium dark:text-foreground/90 group-hover:text-primary/90 transition-colors">
+                    {minProduct?.name}
                   </p>
                 </div>
               </div>
@@ -471,13 +497,12 @@ function GeneralOverviewComponent() {
                       <div className="flex justify-between items-center w-full gap-4">
                         <div className="flex items-center gap-3">
                           <div className="w-2 h-2 rounded-full bg-primary/70" />
-                          <span className="text-base font-medium text-foreground/90">{product.name}</span>
+                          <span className="text-base font-medium text-amber-900 dark:text-foreground/90">{product.name}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-lg font-semibold whitespace-nowrap text-foreground/90 tabular-nums">
+                          <span className="text-lg font-semibold whitespace-nowrap text-amber-900 dark:text-foreground/90 tabular-nums pr-2">
                             {product.totalQuantity.toLocaleString()}
                           </span>
-                          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                         </div>
                       </div>
                     </AccordionTrigger>
@@ -497,12 +522,13 @@ function GeneralOverviewComponent() {
                                 <div 
                                   key={branchName} 
                                   className={cn(
-                                    "flex justify-between items-center py-2 px-3 rounded-md transition-colors",
-                                    "hover:bg-accent/50"
+                                    "flex bg-gray-200 justify-between items-center py-2 px-3 rounded-md transition-colors",
+                                    "hover:bg-accent/150",
+                                    "even:bg-accent/100"
                                   )}
                                 >
                                   <div className="flex items-center gap-2">
-                                    <span className="text-sm font-medium text-foreground/80">{branchName}</span>
+                                    <span className="text-sm font-medium text-amber-900 dark:text-foreground/80">{branchName}</span>
                                     <span className="text-xs text-muted-foreground">
                                       ({percentage.toFixed(1)}%)
                                     </span>
@@ -516,7 +542,7 @@ function GeneralOverviewComponent() {
                                         }} 
                                       />
                                     </div>
-                                    <span className="font-medium text-foreground/90 tabular-nums w-16 text-right">
+                                    <span className="font-medium text-amber-900 dark:text-foreground/90 tabular-nums w-16 text-right">
                                       {quantity.toLocaleString()}
                                     </span>
                                   </div>

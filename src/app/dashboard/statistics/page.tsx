@@ -7,7 +7,7 @@ import { SingleBranchView } from '@/components/statistics/single-branch-view';
 export default function StatisticsPage() {
   return (
     <div className="container mx-auto py-6">
-      <h1 className="text-3xl font-bold mb-6">Statistika Paneli</h1>
+      <h1 className="text-3xl font-bold mb-6 text-amber-900">Statistika Paneli</h1>
       
       <Tabs defaultValue="general" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
