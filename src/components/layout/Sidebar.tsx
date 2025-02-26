@@ -9,7 +9,7 @@ import {
   HomeIcon, ChartBarIcon, ShoppingCartIcon, BeakerIcon, 
   BuildingStorefrontIcon, CubeIcon, WrenchScrewdriverIcon,
   Cog6ToothIcon, BellIcon, SparklesIcon, ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon, SunIcon, MoonIcon, XMarkIcon, Bars3Icon
+  ChevronDoubleRightIcon, SunIcon, MoonIcon, XMarkIcon, Bars3Icon, ShoppingBagIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { LuLogOut } from 'react-icons/lu';
@@ -31,7 +31,7 @@ const mainMenu: MenuItem[] = [
     icon: SparklesIcon,
     badge: 'Tezliklə' 
   },
-  { title: 'Stok və Hazırlıq', path: '/dashboard/stock', icon: BeakerIcon },
+  { title: 'Ərzaq Təqibi', path: '/dashboard/needs-stock', icon: BeakerIcon },
 ];
 
 const managementMenu: MenuItem[] = [
