@@ -11,6 +11,8 @@ import {
   Cog6ToothIcon, BellIcon, SparklesIcon, ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon, SunIcon, MoonIcon, XMarkIcon, Bars3Icon
 } from '@heroicons/react/24/outline';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { LuLogOut } from 'react-icons/lu';
 
 interface MenuItem {
   title: string;
@@ -50,6 +52,7 @@ export default function Sidebar({ className = '' }: SidebarProps) {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const { signOut } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -187,6 +190,16 @@ export default function Sidebar({ className = '' }: SidebarProps) {
                   </button>
                 </div>
               )}
+
+              <div className="border-t border-amber-100 p-4">
+                <button
+                  onClick={() => signOut()}
+                  className="flex w-full items-center px-4 py-3 text-sm font-medium text-amber-700 rounded-lg hover:bg-amber-100/50 hover:text-amber-900"
+                >
+                  <LuLogOut className="mr-3 h-5 w-5" />
+                  Çıxış
+                </button>
+              </div>
             </motion.aside>
           </>
         )}
@@ -256,6 +269,15 @@ export default function Sidebar({ className = '' }: SidebarProps) {
             </button>
           </div>
         )}
+
+        <div className="border-t border-amber-100 p-4">
+          <button
+            onClick={() => signOut()}
+            className="flex w-full items-center px-4 py-3 text-sm font-medium text-amber-700 rounded-lg hover:bg-amber-100/50 hover:text-amber-900"
+          >
+            <LuLogOut className="mr-3 h-5 w-5" />
+          </button>
+        </div>
       </motion.aside>
     </>
   );

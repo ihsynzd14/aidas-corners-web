@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Aidas Corners Web Panel",
-  description: "Modern Next.js uygulaması",
+  description: "AI Integrated Web Panel and Management System",
 }
 
 export default function RootLayout({

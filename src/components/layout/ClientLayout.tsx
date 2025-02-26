@@ -9,7 +9,7 @@ import { ThemeProvider } from '@/providers/theme-provider';
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const isPublicPage = pathname === '/' || pathname === '/login';
+  const isLoginPage = pathname === '/' || pathname === '/login';
 
   useEffect(() => {
     setMounted(true);
@@ -27,8 +27,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       disableTransitionOnChange
     >
       <div className="flex min-h-screen">
-        {!isPublicPage && <Sidebar />}
-        <main className={cn("flex-1 bg-gray-50 dark:bg-gray-900", isPublicPage && "w-full")}>
+        {!isLoginPage && <Sidebar />}
+        <main className={cn("flex-1 bg-gray-50 dark:bg-gray-900", isLoginPage && "w-full")}>
           {children}
         </main>
       </div>

@@ -1,10 +1,11 @@
 'use client';
 
-import { Suspense } from "react"
+import { Suspense, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface LoginFormData {
   email: string
@@ -12,23 +13,49 @@ interface LoginFormData {
   rememberMe: boolean
 }
 
-export default function HomePage() {
-  const { signIn } = useAuth();
+export default function LoginPage() {
+  const { signIn, user } = useAuth();
   const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+
+  // Kullanıcı henüz yüklenmediyse veya yönlendirme yapılıyorsa
+  if (user) {
+    return null;
+  }
 
   const handleLogin = async (formData: FormData) => {
+    setError('');
+    setIsLoading(true);
+
     try {
       const email = formData.get('email') as string;
       const password = formData.get('password') as string;
       
+      if (!email || !password) {
+        setError('Zəhmət olmasa bütün xanaları doldurun.');
+        return;
+      }
+
       await signIn(email, password);
+      
+      // Başarılı giriş sonrası dashboard'a yönlendir
+      router.push('/dashboard/');
     } catch (error) {
       setError('Giriş zamanı xəta baş verdi. Zəhmət olmasa məlumatlarınızı yoxlayın.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100">
       <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-12">
         {/* Sol taraf - Giriş formu */}
         <div className="flex-1 text-center md:text-left">
@@ -51,8 +78,10 @@ export default function HomePage() {
                   <input
                     type="email"
                     name="email"
+                    required
                     className="w-full px-4 py-3 rounded-lg border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white/50"
                     placeholder="misal@aidascorners.com"
+                    disabled={isLoading}
                   />
                 </div>
                 
@@ -63,8 +92,10 @@ export default function HomePage() {
                   <input
                     type="password"
                     name="password"
+                    required
                     className="w-full px-4 py-3 rounded-lg border border-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white/50"
                     placeholder="••••••••"
+                    disabled={isLoading}
                   />
                 </div>
 
@@ -74,6 +105,7 @@ export default function HomePage() {
                       type="checkbox" 
                       name="rememberMe"
                       className="rounded text-amber-600 focus:ring-amber-500 mr-2" 
+                      disabled={isLoading}
                     />
                     <span className="text-sm text-amber-800">Məni xatırla</span>
                   </label>
@@ -84,9 +116,14 @@ export default function HomePage() {
 
                 <button 
                   type="submit"
-                  className="w-full bg-amber-800 text-white px-8 py-3 rounded-lg hover:bg-amber-700 transition-colors duration-300 font-medium shadow-lg hover:shadow-xl"
+                  disabled={isLoading}
+                  className={`w-full bg-amber-800 text-white px-8 py-3 rounded-lg transition-colors duration-300 font-medium shadow-lg 
+                    ${isLoading 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : 'hover:bg-amber-700 hover:shadow-xl'
+                    }`}
                 >
-                  Daxil Ol
+                  {isLoading ? 'Daxil olunur...' : 'Daxil Ol'}
                 </button>
               </form>
 
@@ -123,6 +160,6 @@ export default function HomePage() {
           </Suspense>
         </div>
       </div>
-    </main>
+    </div>
   )
 } 
