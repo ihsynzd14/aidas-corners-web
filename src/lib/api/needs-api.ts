@@ -7,7 +7,8 @@ import {
   getDocs, 
   query, 
   orderBy, 
-  writeBatch 
+  writeBatch,
+  where
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
@@ -52,6 +53,7 @@ export interface DailyNeedOrder {
   quantity: string;
   totalPrice: string;
   unit: string;
+  market: string;
 }
 
 // Needs koleksiyonu için fonksiyonlar
@@ -126,32 +128,53 @@ export const formatDate = (date: Date): string => {
 
 export async function saveDailyNeeds(date: Date, needs: DailyNeedOrder[]): Promise<void> {
   try {
+    console.log('saveDailyNeeds çağrıldı:', { date, needs });
+    
     const dateStr = formatDate(date); // "DD.MM.YYYY" formatında
+    console.log('Formatlanmış tarih:', dateStr);
+    
     const needsRef = collection(db, 'needOrders', dateStr, 'needs_list');
+    console.log('Koleksiyon referansı oluşturuldu');
     
     const batch = writeBatch(db);
 
     // Önce mevcut belgeleri silelim
     const existingDocs = await getDocs(needsRef);
+    console.log('Mevcut belgeler alındı:', existingDocs.docs.length);
+    
     existingDocs.docs.forEach(doc => {
       batch.delete(doc.ref);
     });
+    console.log('Mevcut belgeler silme işlemine eklendi');
 
     // Yeni belgeleri ekleyelim
-    needs.forEach((need) => {
+    needs.forEach((need, index) => {
+      console.log(`Belge ${index + 1} ekleniyor:`, need);
       const needDoc = doc(needsRef);
+      
+      // Virgülleri noktalara çevir ve sayısal değerleri doğru formatta kaydet
+      const price = need.price.replace(',', '.');
+      const quantity = need.quantity.replace(',', '.');
+      const totalPrice = need.totalPrice.replace(',', '.');
+      
       batch.set(needDoc, {
         name: need.name,
-        price: need.price,
-        quantity: need.quantity,
-        totalPrice: need.totalPrice,
+        price: price,
+        quantity: quantity,
+        totalPrice: totalPrice,
         unit: need.unit,
+        market: need.market || 'Diğer', // Market bilgisi yoksa "Diğer" olarak ayarla
         createdAt: Date.now()
       });
     });
+    console.log('Tüm belgeler batch işlemine eklendi');
 
+    console.log('Batch işlemi commit ediliyor...');
     await batch.commit();
+    console.log('Batch işlemi başarıyla tamamlandı');
+    
     clearCache();
+    console.log('Cache temizlendi');
   } catch (error) {
     console.error('Error saving daily needs:', error);
     throw error;
@@ -173,12 +196,19 @@ export async function getDailyNeeds(date: Date): Promise<DailyNeedOrder[]> {
     const querySnapshot = await getDocs(q);
     const dailyNeeds = querySnapshot.docs.map(doc => {
       const data = doc.data();
+      
+      // Sayısal değerleri string olarak formatla
+      const price = typeof data.price === 'number' ? data.price.toFixed(2) : data.price;
+      const quantity = typeof data.quantity === 'number' ? data.quantity.toFixed(2) : data.quantity;
+      const totalPrice = typeof data.totalPrice === 'number' ? data.totalPrice.toFixed(2) : data.totalPrice;
+      
       return {
         name: data.name,
-        price: data.price,
-        quantity: data.quantity,
-        totalPrice: data.totalPrice,
-        unit: data.unit
+        price: price,
+        quantity: quantity,
+        totalPrice: totalPrice,
+        unit: data.unit,
+        market: data.market || 'Diğer' // Market bilgisi yoksa "Diğer" olarak ayarla
       } as DailyNeedOrder;
     });
     
@@ -191,29 +221,37 @@ export async function getDailyNeeds(date: Date): Promise<DailyNeedOrder[]> {
 }
 
 // Günlük ihtiyaçlardan belirli bir öğeyi silme fonksiyonu
-export async function deleteDailyNeed(date: Date, needName: string): Promise<void> {
+export const deleteDailyNeed = async (date: Date, needName: string, market: string): Promise<void> => {
   try {
-    const dateStr = formatDate(date);
-    const needsRef = collection(db, 'needOrders', dateStr, 'needs_list');
+    const formattedDate = formatDate(date);
+    const needsRef = collection(db, 'needOrders', formattedDate, 'needs_list');
     
-    // Önce mevcut belgeleri al
-    const querySnapshot = await getDocs(needsRef);
+    // Belirli isim ve markete sahip belgeleri bul
+    const q = query(
+      needsRef,
+      where('name', '==', needName),
+      where('market', '==', market)
+    );
     
-    // Silinecek belgeyi bul
-    const needToDelete = querySnapshot.docs.find(doc => doc.data().name === needName);
+    const querySnapshot = await getDocs(q);
     
-    if (needToDelete) {
-      // Belgeyi sil
-      await deleteDoc(needToDelete.ref);
-      
-      // Cache'i temizle
-      const cacheKey = `dailyNeeds_${dateStr}`;
-      clearCache();
-    } else {
-      throw new Error('Silinecek ərzaq tapılmadı');
-    }
+    // Batch işlemi başlat
+    const batch = writeBatch(db);
+    
+    // Bulunan belgeleri sil
+    querySnapshot.docs.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+    
+    // Batch işlemini uygula
+    await batch.commit();
+    
+    // Cache'i temizle
+    clearCache();
+    
+    console.log(`"${needName}" ürünü "${market}" marketinden silindi`);
   } catch (error) {
-    console.error('Error deleting daily need:', error);
+    console.error('Günlük ihtiyaç silinirken hata:', error);
     throw error;
   }
-} 
+}; 
