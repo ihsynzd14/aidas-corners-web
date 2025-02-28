@@ -12,7 +12,7 @@ const API_KEYS = {
   gemini: process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyC26TIDS26c5rve0bM2OQkkxEdoWNUtNhg'
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://aidas-corners-springboot-production.up.railway.app/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://aidas-corners-springboot-production.up.railway.app/api';
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 export default function AIAssistantClient() {
