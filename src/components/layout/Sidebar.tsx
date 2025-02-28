@@ -28,8 +28,7 @@ const mainMenu: MenuItem[] = [
   { 
     title: 'AI Köməkçi', 
     path: '/dashboard/ai-assistant', 
-    icon: SparklesIcon,
-    badge: 'Tezliklə' 
+    icon: SparklesIcon
   },
   { title: 'Ərzaq Təqibi', path: '/dashboard/needs-stock', icon: BeakerIcon },
 ];

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.22.0",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^4.1.2",
     "@radix-ui/react-dialog": "^1.1.6",
@@ -31,6 +32,7 @@
     "dialog": "^0.3.1",
     "firebase": "^11.3.1",
     "framer-motion": "^12.4.7",
+    "groq-sdk": "^0.15.0",
     "input": "^1.0.1",
     "js-cookie": "^3.0.5",
     "jspdf": "^3.0.0",
