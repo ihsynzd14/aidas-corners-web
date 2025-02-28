@@ -134,79 +134,80 @@ export default function CreateOrderButton() {
             Yeni Sifariş
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>Yeni Sifariş</DialogTitle>
             <DialogDescription>
               Yeni sifariş yaratmaq üçün aşağıdakı məlumatları doldurun
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label>Sifariş Tarixi</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {format(selectedDate, 'PPP', { locale: az })}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={(date) => date && setSelectedDate(date)}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Filial</Label>
-              <Select value={selectedBranch} onValueChange={setSelectedBranch}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Filial seçin" />
-                </SelectTrigger>
-                <SelectContent>
-                  {branches.map((branch) => (
-                    <SelectItem key={branch.id} value={`${branch.type} ${branch.name}`}>
-                      {branch.type} {branch.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label>WhatsApp Sifarişi</Label>
-              <Textarea
-                value={orderText}
-                onChange={(e) => setOrderText(e.target.value)}
-                placeholder="WhatsApp sifarişini buraya yapışdırın..."
-                className="min-h-[200px]"
-                disabled={isLoading}
-              />
-            </div>
-
-            {correctedText && orderText !== correctedText && (
+          <div className="flex-1 overflow-y-auto pr-1">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label>Düzəldilmiş Mətn</Label>
-                <div className="rounded-md bg-muted p-4">
-                  <pre className="text-sm whitespace-pre-wrap">{correctedText}</pre>
-                </div>
+                <Label>Sifariş Tarixi</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {format(selectedDate, 'PPP', { locale: az })}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => date && setSelectedDate(date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
-            )}
 
-            <DialogFooter>
-              <Button type="submit" disabled={isLoading || !selectedBranch || !orderText.trim()}>
-                {isLoading ? 'Yaradılır...' : 'Yarat'}
-              </Button>
-            </DialogFooter>
-          </form>
+              <div className="space-y-2">
+                <Label>Filial</Label>
+                <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Filial seçin" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {branches.map((branch) => (
+                      <SelectItem key={branch.id} value={`${branch.type} ${branch.name}`}>
+                        {branch.type} {branch.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>WhatsApp Sifarişi</Label>
+                <Textarea
+                  value={orderText}
+                  onChange={(e) => setOrderText(e.target.value)}
+                  placeholder="WhatsApp sifarişini buraya yapışdırın..."
+                  className="min-h-[200px]"
+                  disabled={isLoading}
+                />
+              </div>
+
+              {correctedText && orderText !== correctedText && (
+                <div className="space-y-2">
+                  <Label>Düzəldilmiş Mətn</Label>
+                  <div className="rounded-md bg-muted p-4">
+                    <pre className="text-sm whitespace-pre-wrap">{correctedText}</pre>
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
+          <DialogFooter className="mt-4">
+            <Button type="submit" disabled={isLoading || !selectedBranch || !orderText.trim()}>
+              {isLoading ? 'Yaradılır...' : 'Yarat'}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
