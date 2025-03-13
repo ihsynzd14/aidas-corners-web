@@ -353,6 +353,45 @@ export const PRODUCT_CORRECTIONS: ProductDefinition[] = [
       "kinder delice",
       "kinder delish"
     ],
+  },
+  {
+    correct: "American Kurabiye",
+    variations: [
+      "amerikan kurabiye",
+      "amerikan cookie",
+      "american cookie",
+      "american kurabiye",
+      "amerikan"
+    ]
+  },
+  {
+    correct: "Çatlaq Kurabiye",
+    variations: [
+      "çatlaq kurabiye",
+      "çatlaq cookie",
+      "crack cookie",
+      "crack kurabiye",
+      "çatlaq"
+    ]
+  },
+  {
+    correct: "Susamlı Kurabiye",
+    variations: [
+      "susamlı kurabiye",
+      "sesame cookie",
+      "sesame kurabiye",
+      "susamlı"
+    ]
+  },
+  {
+    correct: "Yulaflı Kurabiye",
+    variations: [
+      "yulaflı kurabiye",
+      "yulaflı cookie",
+      "oatmeal cookie",
+      "oat kurabiye",
+      "yulaflı"
+    ]
   }
 ];
 
