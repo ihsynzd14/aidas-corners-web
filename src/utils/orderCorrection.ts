@@ -322,7 +322,7 @@ export const PRODUCT_CORRECTIONS: ProductDefinition[] = [
     ],
   },
   {
-    correct: "Dubai bardaq",
+    correct: "Dubai supangele ",
     variations: [
       "dubai bardak",
       "dubay bardaq",
@@ -330,7 +330,11 @@ export const PRODUCT_CORRECTIONS: ProductDefinition[] = [
       "dubai stəkan",
       "dubay stəkan",
       "dubai stekan",
-      "dubay stekan"
+      "dubay stekan",
+      "dubai supangele",
+      "dubay supangele",
+      "dubai supanqele",
+      "dubay supanqele"
     ],
   },
   {
@@ -391,6 +395,16 @@ export const PRODUCT_CORRECTIONS: ProductDefinition[] = [
       "oatmeal cookie",
       "oat kurabiye",
       "yulaflı"
+    ]
+  },
+  {
+    correct: "Krokant",
+    variations: [
+      "krokant",
+      "krokant cookie",
+      "krokant kurabiye",
+      "krokont",
+      "crocant"
     ]
   }
 ];
