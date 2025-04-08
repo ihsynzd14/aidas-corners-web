@@ -406,6 +406,27 @@ export const PRODUCT_CORRECTIONS: ProductDefinition[] = [
       "krokont",
       "crocant"
     ]
+  },
+  {
+    correct: "Coconut kurabiye",
+    variations: [
+      "coconut kurabiye",
+      "coconut cookie",
+      "coconut kurabiyə",
+      "coconut cookie",
+      "kokoslu kurabiye",
+      "kokoslu cookie",
+      "kokoslu kurabiyə",
+    ]
+  },
+  {
+    correct: "Acıbadem kurabiye",
+    variations: [
+      "acıbadem kurabiye",
+      "acıbadem cookie",
+      "acıbadem kurabiyə",
+      "acıbadem"
+    ]
   }
 ];
 
