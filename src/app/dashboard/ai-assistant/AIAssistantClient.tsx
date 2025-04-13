@@ -7,8 +7,8 @@ import { Message, DateRange, AIProvider } from '@/types/ai-assistant';
 import { toast } from 'sonner';
 
 const API_KEYS = {
-  groq: process.env.NEXT_PUBLIC_GROQ_API_KEY || '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',
-  openrouter: process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || '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',
+  groq: process.env.NEXT_PUBLIC_GROQ_API_KEY || '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',
+  openrouter: process.env.NEXT_PUBLIC_OPENROUTER_API_KEY || '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',
   gemini: process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'AIzaSyC26TIDS26c5rve0bM2OQkkxEdoWNUtNhg'
 };
 
