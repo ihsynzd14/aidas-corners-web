@@ -427,7 +427,15 @@ export const PRODUCT_CORRECTIONS: ProductDefinition[] = [
       "acıbadem kurabiyə",
       "acıbadem"
     ]
-  }
+  },
+  {
+    correct: "Pavlova",
+    variations: [
+      "pavlova",
+      "pavlovo",
+      "pavlava"
+    ]
+  },
 ];
 
 interface OrderItem {
